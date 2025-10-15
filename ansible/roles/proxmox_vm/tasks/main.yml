@@ -6,7 +6,7 @@
     api_host: "{{ proxmox_api_host }}"
     validate_certs: false
     clone: "{{ vm_template_id }}"
-    vmid: "{{ item.vmid }}"
+    newid: "{{ item.vmid }}"
     name: "{{ item.hostname }}"
     node: "{{ proxmox_node }}"
     storage: "{{ vm_storage | default('local-lvm') }}"
