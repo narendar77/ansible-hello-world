@@ -1,7 +1,7 @@
 ---
 # Proxmox connection details
 proxmox_api_host: "192.168.1.10"
-proxmox_node: "pve"
+proxmox_node: "narendar"
 proxmox_api_user: "root@pam"
 # proxmox_api_password: should be set via environment variable or vault
 
