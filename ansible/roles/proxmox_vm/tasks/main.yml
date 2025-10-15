@@ -1,0 +1,76 @@
+---
+- name: Clone VM from template
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    clone: "{{ vm_template_id }}"
+    vmid: "{{ item.vmid }}"
+    name: "{{ item.hostname }}"
+    node: "{{ proxmox_node }}"
+    storage: "{{ vm_storage | default('local-lvm') }}"
+    format: "{{ vm_format | default('qcow2') }}"
+    full: true
+    timeout: 300
+  loop: "{{ vms }}"
+  register: cloned_vms
+
+- name: Configure VM resources
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    vmid: "{{ item.vmid }}"
+    node: "{{ proxmox_node }}"
+    cores: "{{ item.cores | default(2) }}"
+    memory: "{{ item.memory | default(2048) }}"
+    update: true
+  loop: "{{ vms }}"
+
+- name: Set VM hostname via cloud-init (if supported)
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    vmid: "{{ item.vmid }}"
+    node: "{{ proxmox_node }}"
+    ciuser: "{{ vm_default_user | default('root') }}"
+    cipassword: "{{ vm_default_password | default(omit) }}"
+    searchdomain: "{{ vm_search_domain | default(omit) }}"
+    nameservers: "{{ vm_nameservers | default(omit) }}"
+    ipconfig:
+      ipconfig0: "{{ item.ipconfig | default('ip=dhcp') }}"
+    update: true
+  loop: "{{ vms }}"
+  when: use_cloud_init | default(false)
+
+- name: Start VMs
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    vmid: "{{ item.vmid }}"
+    node: "{{ proxmox_node }}"
+    state: started
+  loop: "{{ vms }}"
+  when: start_vms | default(true)
+
+- name: Wait for VMs to be running
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    vmid: "{{ item.vmid }}"
+    node: "{{ proxmox_node }}"
+    state: current
+  loop: "{{ vms }}"
+  register: vm_status
+  until: vm_status is success
+  retries: 10
+  delay: 10
+  when: start_vms | default(true)
+
+- name: Display VM information
+  debug:
+    msg: "VM {{ item.hostname }} (ID: {{ item.vmid }}) has been created and started"
+  loop: "{{ vms }}"

@@ -1,0 +1,20 @@
+---
+- name: Create Proxmox VMs
+  hosts: proxmox
+  gather_facts: false
+  
+  vars:
+    # Override default values here or use extra-vars
+    proxmox_api_password: "{{ lookup('env', 'PROXMOX_PASSWORD') }}"
+  
+  roles:
+    - proxmox_vm
+  
+  post_tasks:
+    - name: Summary of created VMs
+      debug:
+        msg: |
+          Successfully created {{ vms | length }} VMs:
+          {% for vm in vms %}
+          - {{ vm.hostname }} (VMID: {{ vm.vmid }})
+          {% endfor %}

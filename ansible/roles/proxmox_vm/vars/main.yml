@@ -1,0 +1,3 @@
+---
+# Override these variables as needed
+# You can also use group_vars or host_vars for environment-specific settings
