@@ -25,6 +25,17 @@ pipeline {
     stage('Create Proxmox VMs') {
       steps {
         script {
+          // Verify environment variable is set
+          sh '''
+            echo "Checking Proxmox password environment variable..."
+            if [ -z "$PROXMOX_PASSWORD" ]; then
+              echo "ERROR: PROXMOX_PASSWORD is not set!"
+              exit 1
+            else
+              echo "PROXMOX_PASSWORD is set (length: ${#PROXMOX_PASSWORD})"
+            fi
+          '''
+          
           // Add SSH key for Proxmox host if needed
           sh '''
             mkdir -p ~/.ssh
@@ -34,7 +45,10 @@ pipeline {
             # ssh-keyscan -H 192.168.1.10 >> ~/.ssh/known_hosts
           '''
         }
-        sh 'ansible-playbook ansible/create_vms.yml -i ansible/inventory -v'
+        sh '''
+          export PROXMOX_PASSWORD="${PROXMOX_PASSWORD}"
+          ansible-playbook ansible/create_vms.yml -i ansible/inventory -v
+        '''
       }
     }
   }
