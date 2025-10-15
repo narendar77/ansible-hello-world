@@ -1,11 +1,16 @@
 ---
 - name: Create Proxmox VMs
-  hosts: proxmox
+  hosts: localhost
+  connection: local
   gather_facts: false
   
   vars:
     # Override default values here or use extra-vars
     proxmox_api_password: "{{ lookup('env', 'PROXMOX_PASSWORD') }}"
+    # Proxmox connection settings
+    proxmox_api_host: "192.168.1.10"
+    proxmox_node: "pve"
+    proxmox_api_user: "root@pam"
   
   roles:
     - proxmox_vm

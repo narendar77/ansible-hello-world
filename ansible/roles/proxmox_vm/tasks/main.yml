@@ -4,6 +4,7 @@
     api_user: "{{ proxmox_api_user }}"
     api_password: "{{ proxmox_api_password }}"
     api_host: "{{ proxmox_api_host }}"
+    validate_certs: false
     clone: "{{ vm_template_id }}"
     vmid: "{{ item.vmid }}"
     name: "{{ item.hostname }}"
@@ -14,24 +15,28 @@
     timeout: 300
   loop: "{{ vms }}"
   register: cloned_vms
+  delegate_to: localhost
 
 - name: Configure VM resources
   community.general.proxmox_kvm:
     api_user: "{{ proxmox_api_user }}"
     api_password: "{{ proxmox_api_password }}"
     api_host: "{{ proxmox_api_host }}"
+    validate_certs: false
     vmid: "{{ item.vmid }}"
     node: "{{ proxmox_node }}"
     cores: "{{ item.cores | default(2) }}"
     memory: "{{ item.memory | default(2048) }}"
     update: true
   loop: "{{ vms }}"
+  delegate_to: localhost
 
 - name: Set VM hostname via cloud-init (if supported)
   community.general.proxmox_kvm:
     api_user: "{{ proxmox_api_user }}"
     api_password: "{{ proxmox_api_password }}"
     api_host: "{{ proxmox_api_host }}"
+    validate_certs: false
     vmid: "{{ item.vmid }}"
     node: "{{ proxmox_node }}"
     ciuser: "{{ vm_default_user | default('root') }}"
@@ -43,23 +48,27 @@
     update: true
   loop: "{{ vms }}"
   when: use_cloud_init | default(false)
+  delegate_to: localhost
 
 - name: Start VMs
   community.general.proxmox_kvm:
     api_user: "{{ proxmox_api_user }}"
     api_password: "{{ proxmox_api_password }}"
     api_host: "{{ proxmox_api_host }}"
+    validate_certs: false
     vmid: "{{ item.vmid }}"
     node: "{{ proxmox_node }}"
     state: started
   loop: "{{ vms }}"
   when: start_vms | default(true)
+  delegate_to: localhost
 
 - name: Wait for VMs to be running
   community.general.proxmox_kvm:
     api_user: "{{ proxmox_api_user }}"
     api_password: "{{ proxmox_api_password }}"
     api_host: "{{ proxmox_api_host }}"
+    validate_certs: false
     vmid: "{{ item.vmid }}"
     node: "{{ proxmox_node }}"
     state: current
@@ -69,6 +78,7 @@
   retries: 10
   delay: 10
   when: start_vms | default(true)
+  delegate_to: localhost
 
 - name: Display VM information
   debug:
