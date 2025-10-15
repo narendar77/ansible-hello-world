@@ -9,7 +9,7 @@
     proxmox_api_password: "{{ lookup('env', 'PROXMOX_PASSWORD') }}"
     # Proxmox connection settings
     proxmox_api_host: "192.168.1.10"
-    proxmox_node: "pve"
+    proxmox_node: "narendar"
     proxmox_api_user: "root@pam"
   
   roles:
