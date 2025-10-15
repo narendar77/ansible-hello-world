@@ -7,6 +7,7 @@ proxmox_api_user: "root@pam"
 
 # VM template settings
 vm_template_id: "100"
+vm_template_name: "rockyos-gold"
 
 # VM storage settings
 vm_storage: "local-lvm"
