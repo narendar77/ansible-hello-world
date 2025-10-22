@@ -22,6 +22,7 @@ vm_nameservers: ""
 
 # VM behavior
 start_vms: true
+configure_hostname: true  # Set hostname inside VMs to match VM name
 
 # List of VMs to create
 vms:

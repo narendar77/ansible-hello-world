@@ -80,6 +80,28 @@
   when: start_vms | default(true)
   delegate_to: localhost
 
+- name: Set hostname inside VMs using qm guest exec
+  ansible.builtin.shell: |
+    qm guest exec {{ item.vmid }} -- /bin/bash -c "hostnamectl set-hostname {{ item.hostname }} && echo '{{ item.hostname }}' > /etc/hostname"
+  loop: "{{ vms }}"
+  when:
+    - start_vms | default(true)
+    - configure_hostname | default(true)
+  delegate_to: "{{ proxmox_api_host }}"
+  vars:
+    ansible_user: root
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+  ignore_errors: true
+  register: hostname_set_result
+
+- name: Display hostname configuration status
+  debug:
+    msg: "Hostname '{{ item.item.hostname }}' set for VM {{ item.item.vmid }} - Status: {{ 'Success' if item.rc == 0 else 'Failed (may need QEMU guest agent)' }}"
+  loop: "{{ hostname_set_result.results }}"
+  when:
+    - configure_hostname | default(true)
+    - hostname_set_result is defined
+
 - name: Display VM information
   debug:
     msg: "VM {{ item.hostname }} (ID: {{ item.vmid }}) has been created and started"
