@@ -1,0 +1,14 @@
+[created_vms]
+# Add your VM IP addresses and target hostnames here
+# Format: IP_ADDRESS target_hostname=HOSTNAME
+
+# Example (update with actual IPs after VMs are created):
+# 192.168.1.101 target_hostname=lxrancherlocalsbx01
+# 192.168.1.102 target_hostname=lxrancherlocalsbx02
+# 192.168.1.103 target_hostname=lxrancherlocalsbx03
+
+[created_vms:vars]
+ansible_user=root
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+# ansible_password=your_vm_password  # Or use SSH key
+# ansible_ssh_private_key_file=~/.ssh/id_rsa

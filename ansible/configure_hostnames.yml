@@ -1,0 +1,49 @@
+---
+- name: Configure VM Hostnames
+  hosts: created_vms
+  gather_facts: true
+  become: true
+  
+  tasks:
+    - name: Display current hostname
+      debug:
+        msg: "Current hostname: {{ ansible_hostname }}, Target hostname: {{ target_hostname }}"
+    
+    - name: Set hostname using hostnamectl
+      ansible.builtin.command:
+        cmd: "hostnamectl set-hostname {{ target_hostname }}"
+      when: target_hostname is defined
+      register: hostnamectl_result
+    
+    - name: Update /etc/hostname
+      ansible.builtin.copy:
+        content: "{{ target_hostname }}\n"
+        dest: /etc/hostname
+        owner: root
+        group: root
+        mode: '0644'
+      when: target_hostname is defined
+    
+    - name: Update /etc/hosts with new hostname
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: "127.0.1.1 {{ target_hostname }}"
+        state: present
+      when: target_hostname is defined
+    
+    - name: Verify hostname is set correctly
+      ansible.builtin.command: hostnamectl status
+      register: hostname_status
+      changed_when: false
+    
+    - name: Display hostname status
+      debug:
+        var: hostname_status.stdout_lines
+    
+    - name: Reboot if hostname changed (optional)
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: 
+        - reboot_after_hostname | default(false)
+        - target_hostname is defined
