@@ -4,7 +4,7 @@
 # SSH Authentication Diagnostic Script
 #############################################
 
-PROXMOX_HOST="192.168.1.10"
+PROXMOX_HOST="192.168.10.10"
 PROXMOX_USER="root"
 SSH_KEY_PATH="${HOME}/.ssh/id_rsa_proxmox"
 

@@ -3,9 +3,9 @@
 # Format: IP_ADDRESS target_hostname=HOSTNAME
 
 # Example (update with actual IPs after VMs are created):
-# 192.168.1.101 target_hostname=lxrancherlocalsbx01
-# 192.168.1.102 target_hostname=lxrancherlocalsbx02
-# 192.168.1.103 target_hostname=lxrancherlocalsbx03
+# 192.168.10.101 target_hostname=lxrancherlocalsbx01
+# 192.168.10.102 target_hostname=lxrancherlocalsbx02
+# 192.168.10.103 target_hostname=lxrancherlocalsbx03
 
 [created_vms:vars]
 ansible_user=root

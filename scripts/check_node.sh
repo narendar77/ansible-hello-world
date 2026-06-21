@@ -4,7 +4,7 @@
 # Check Proxmox Node Name
 #############################################
 
-PROXMOX_HOST="192.168.1.10"
+PROXMOX_HOST="192.168.10.10"
 PROXMOX_USER="root"
 
 echo "=========================================="

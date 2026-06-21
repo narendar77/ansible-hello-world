@@ -5,7 +5,7 @@
 # Gets IP addresses from Proxmox and creates inventory file
 #############################################
 
-PROXMOX_HOST="192.168.1.10"
+PROXMOX_HOST="192.168.10.10"
 PROXMOX_USER="root"
 OUTPUT_FILE="../ansible/inventory_vms"
 

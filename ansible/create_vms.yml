@@ -8,7 +8,7 @@
     # Override default values here or use extra-vars
     proxmox_api_password: "{{ lookup('env', 'PROXMOX_PASSWORD') }}"
     # Proxmox connection settings
-    proxmox_api_host: "192.168.1.10"
+    proxmox_api_host: "192.168.10.10"
     proxmox_node: "narendar"
     proxmox_api_user: "root@pam"
   
