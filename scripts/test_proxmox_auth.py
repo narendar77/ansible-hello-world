@@ -17,10 +17,11 @@ except ImportError:
     print("Run: pip install proxmoxer requests")
     sys.exit(1)
 
-# Configuration
-PROXMOX_HOST = "192.168.10.10"
-PROXMOX_USER = "root@pam"
-PROXMOX_NODE = "pve"
+# Import centralized configuration
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from config import PROXMOX_HOST, PROXMOX_USER, PROXMOX_NODE
 
 def test_basic_connectivity():
     """Test if Proxmox API is reachable"""

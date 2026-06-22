@@ -5,8 +5,10 @@
 # Quick setup for Jenkins to Proxmox SSH
 #############################################
 
-PROXMOX_HOST="192.168.10.10"
-PROXMOX_USER="root"
+# Source centralized configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/config.sh"
+
 SSH_KEY_PATH="${HOME}/.ssh/id_rsa_proxmox"
 
 echo "=========================================="

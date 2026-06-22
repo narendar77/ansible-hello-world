@@ -4,8 +4,9 @@
 # Check Proxmox Node Name
 #############################################
 
-PROXMOX_HOST="192.168.10.10"
-PROXMOX_USER="root"
+# Source centralized configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/config.sh"
 
 echo "=========================================="
 echo "Proxmox Node Name Check"

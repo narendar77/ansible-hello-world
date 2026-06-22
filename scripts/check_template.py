@@ -4,6 +4,8 @@ Check Proxmox Template and VM IDs
 """
 
 import sys
+import os
+
 try:
     from proxmoxer import ProxmoxAPI
     import requests
@@ -12,10 +14,11 @@ except ImportError:
     print("ERROR: Install required packages: pip install proxmoxer requests")
     sys.exit(1)
 
-PROXMOX_HOST = "192.168.10.10"
-PROXMOX_USER = "root@pam"
+# Import centralized configuration
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from config import PROXMOX_HOST, PROXMOX_USER, PROXMOX_NODE
+
 PROXMOX_PASSWORD = "reddy007"
-PROXMOX_NODE = "pve"
 TEMPLATE_ID = 100
 TARGET_VMIDS = [201, 202, 203]
 

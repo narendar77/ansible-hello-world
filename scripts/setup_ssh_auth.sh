@@ -8,10 +8,12 @@
 
 set -e  # Exit on error
 
+# Source centralized configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/config.sh"
+
 # Configuration
 JENKINS_HOST="192.168.10.149"
-PROXMOX_HOST="192.168.10.10"
-PROXMOX_USER="root"
 SSH_KEY_TYPE="rsa"
 SSH_KEY_BITS="4096"
 SSH_KEY_NAME="id_${SSH_KEY_TYPE}_proxmox"

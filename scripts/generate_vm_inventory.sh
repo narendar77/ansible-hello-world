@@ -5,8 +5,10 @@
 # Gets IP addresses from Proxmox and creates inventory file
 #############################################
 
-PROXMOX_HOST="192.168.10.10"
-PROXMOX_USER="root"
+# Source centralized configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/config.sh"
+
 OUTPUT_FILE="../ansible/inventory_vms"
 
 # VM configuration (VMID:HOSTNAME)
